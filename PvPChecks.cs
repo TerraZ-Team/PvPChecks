@@ -84,7 +84,7 @@ namespace PvPChecks
             }
             base.Dispose(disposing);
         }
-        private async void OnReload(ReloadEventArgs args) // релоад @iBelarus
+        private async void OnReload(ReloadEventArgs args) // Г°ГҐГ«Г®Г Г¤ @iBelarus
         {
             cfg = new ConfigFile<Config>();
             cfg.Read(configPath, out bool write);
@@ -98,7 +98,7 @@ namespace PvPChecks
             args.Player.SendSuccessMessage("[PvPChecks] Reloaded PVP config!");
         }
 
-        private void OnPlayerCommand(PlayerCommandEventArgs args) // Перенёс с Essentials+ сюда запрет команд в пвп
+        private void OnPlayerCommand(PlayerCommandEventArgs args) // ГЏГҐГ°ГҐГ­ВёГ± Г± Essentials+ Г±ГѕГ¤Г  Г§Г ГЇГ°ГҐГІ ГЄГ®Г¬Г Г­Г¤ Гў ГЇГўГЇ
         {
             if (args.Handled || args.Player == null)
             {
@@ -157,8 +157,8 @@ namespace PvPChecks
 
             if (SolarArmorDebuff && player.TPlayer.armor[0].type == Terraria.ID.ItemID.SolarFlareHelmet && player.TPlayer.armor[1].type == Terraria.ID.ItemID.SolarFlareBreastplate && player.TPlayer.armor[2].type == Terraria.ID.ItemID.SolarFlareLeggings)
             {
-                //player.SetBuff(36, 180); // Ослабление солнечной брони @iBelarus
-                player.SetBuff(Terraria.ID.BuffID.WitheredArmor, 360); // Ослабление солнечной брони - 195 buff @iBelarus
+                //player.SetBuff(36, 180); // ГЋГ±Г«Г ГЎГ«ГҐГ­ГЁГҐ Г±Г®Г«Г­ГҐГ·Г­Г®Г© ГЎГ°Г®Г­ГЁ @iBelarus
+                player.SetBuff(Terraria.ID.BuffID.Ichor, 360); // ГЋГ±Г«Г ГЎГ«ГҐГ­ГЁГҐ Г±Г®Г«Г­ГҐГ·Г­Г®Г© ГЎГ°Г®Г­ГЁ - 195 buff @iBelarus
             }
 
             //Check accs
@@ -260,7 +260,7 @@ namespace PvPChecks
 
             if (SolarArmorDebuff && !args.Player.HasPermission("pvpchecks.ignore") && !args.Player.TPlayer.hostile && args.Player.TPlayer.armor[0].type == Terraria.ID.ItemID.SolarFlareHelmet && args.Player.TPlayer.armor[1].type == Terraria.ID.ItemID.SolarFlareBreastplate && args.Player.TPlayer.armor[2].type == Terraria.ID.ItemID.SolarFlareLeggings)
             {
-                args.Player.SendErrorMessage("Solar Flare Armor ([i:2763][i:2764][i:2765]) applies a debuff Withered Armor (Defense is cut in half)."); // сообщение о дебаффе солнечной брони @iBelarus
+                args.Player.SendErrorMessage("Solar Flare Armor ([i:2763][i:2764][i:2765]) applies a debuff Withered Armor (Defense is cut in half)."); // Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г® Г¤ГҐГЎГ ГґГґГҐ Г±Г®Г«Г­ГҐГ·Г­Г®Г© ГЎГ°Г®Г­ГЁ @iBelarus
             }
         }
         private void OnNewProjectile(object sender, GetDataHandlers.NewProjectileEventArgs args)
@@ -277,7 +277,7 @@ namespace PvPChecks
                     args.Handled = true;
                 }
 
-                if (PortalGun && (args.Type == Terraria.ID.ProjectileID.PortalGunBolt || args.Type == Terraria.ID.ProjectileID.PortalGunGate)) // убирать снаряды портал гана @iBelarus
+                if (PortalGun && (args.Type == Terraria.ID.ProjectileID.PortalGunBolt || args.Type == Terraria.ID.ProjectileID.PortalGunGate)) // ГіГЎГЁГ°Г ГІГј Г±Г­Г Г°ГїГ¤Г» ГЇГ®Г°ГІГ Г« ГЈГ Г­Г  @iBelarus
                 {
                     args.Player.RemoveProjectile(args.Identity, args.Owner);
                     args.Handled = true;
@@ -314,7 +314,7 @@ namespace PvPChecks
         {
             if (args.MsgId == PacketTypes.PlayerAddBuff)
             {
-                if (TShock.Players[args.number].TPlayer.hostile && args.number2 != 149f && args.number2 != 195f) //это уже было, типо запрещает баффы накидывать командой во время пвп. 149 и 195 - это окаменение (окаменение за запретку) и withered armor (SolarArmorDebuff)
+                if (TShock.Players[args.number].TPlayer.hostile && args.number2 != 149f && args.number2 != 195f) //ГЅГІГ® ГіГ¦ГҐ ГЎГ»Г«Г®, ГІГЁГЇГ® Г§Г ГЇГ°ГҐГ№Г ГҐГІ ГЎГ ГґГґГ» Г­Г ГЄГЁГ¤Г»ГўГ ГІГј ГЄГ®Г¬Г Г­Г¤Г®Г© ГўГ® ГўГ°ГҐГ¬Гї ГЇГўГЇ. 149 ГЁ 195 - ГЅГІГ® Г®ГЄГ Г¬ГҐГ­ГҐГ­ГЁГҐ (Г®ГЄГ Г¬ГҐГ­ГҐГ­ГЁГҐ Г§Г  Г§Г ГЇГ°ГҐГІГЄГі) ГЁ withered armor (SolarArmorDebuff)
                 {
                     args.Handled = true;
                 }
@@ -335,7 +335,7 @@ namespace PvPChecks
             if (PortalGun && args.MsgID == PacketTypes.PlayerTeleportPortal && TShock.Players[args.Msg.whoAmI].TPlayer.hostile)
             {
                 TShock.Players[args.Msg.whoAmI].SetPvP(false, true);
-                TShock.Players[args.Msg.whoAmI].SendErrorMessage("Portal Gun is not allowed in PvP."); // Запрет на телепорт в порталгановские порталы @iBelarus
+                TShock.Players[args.Msg.whoAmI].SendErrorMessage("Portal Gun is not allowed in PvP."); // Г‡Г ГЇГ°ГҐГІ Г­Г  ГІГҐГ«ГҐГЇГ®Г°ГІ Гў ГЇГ®Г°ГІГ Г«ГЈГ Г­Г®ГўГ±ГЄГЁГҐ ГЇГ®Г°ГІГ Г«Г» @iBelarus
             }
         }
 
