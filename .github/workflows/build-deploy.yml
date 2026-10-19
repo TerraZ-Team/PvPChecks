@@ -1,0 +1,63 @@
+name: Build and deploy plugin
+
+on:
+  pull_request:
+  push:
+    tags: ["*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore
+        run: dotnet restore src/PvPChecks.csproj
+      - name: Build
+        run: dotnet build src/PvPChecks.csproj --configuration Release --no-restore
+      - name: Test command ban policy
+        run: dotnet run --project tests/PvPChecks.PolicyTests.csproj --configuration Release
+      - name: Prepare artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifact
+          cp src/bin/Release/net9.0/PvPChecks.dll artifact/PvPChecks.dll
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: PvPChecks
+          path: artifact/PvPChecks.dll
+          if-no-files-found: error
+          retention-days: 14
+
+  deploy:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    runs-on: [self-hosted, windows, x64]
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: PvPChecks
+          path: ${{ runner.temp }}\PvPChecks
+      - name: Deploy plugin
+        shell: pwsh
+        env:
+          DEPLOY_DIR: ${{ vars.PLUGIN_DEPLOY_DIR }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:DEPLOY_DIR)) { $env:DEPLOY_DIR = "C:\github-deploy" }
+          New-Item -ItemType Directory -Force -Path $env:DEPLOY_DIR | Out-Null
+          Copy-Item "$env:RUNNER_TEMP\PvPChecks\PvPChecks.dll" (Join-Path $env:DEPLOY_DIR "PvPChecks.dll") -Force
