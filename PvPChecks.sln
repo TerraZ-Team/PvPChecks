@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PvPChecks", "PvPChecks.csproj", "{20565F22-9833-4603-9084-935315A46F89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PvPChecks", "src\PvPChecks.csproj", "{20565F22-9833-4603-9084-935315A46F89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
